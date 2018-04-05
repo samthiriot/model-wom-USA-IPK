@@ -12,7 +12,6 @@ Volume 492, 2018, Pages 418-430,
 ISSN 0378-4371,
 https://doi.org/10.1016/j.physa.2017.09.056.
 (http://www.sciencedirect.com/science/article/pii/S0378437117309482)
-Keywords: Information dynamics; Word-of-mouth; Diffusion of innovations; Viral marketing; Complex systems; Multi-agent modelling; Complex networks
 
 
 # How to use it?
@@ -23,9 +22,9 @@ This model runs under Netlogo 5.1; you can freely download it from here: https:/
 Start Netlogo; open the model.nlogo file from netlogo; click setup, then simulate. 
 Then restart by tuning parameters.
 
-# Advanced 
+# Advanced 
 
-## generate other networks 
+## generate other networks 
 
 networks in this model represent the structure of interactions, which has a huge influence on the dynamics simulated. 
 
