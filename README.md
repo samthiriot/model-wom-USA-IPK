@@ -17,7 +17,7 @@ https://doi.org/10.1016/j.physa.2017.09.056.
 # How to use it?
 
 
-This model runs under Netlogo 5.1; you can freely download it from here: https://ccl.northwestern.edu/netlogo/download.shtml
+This model runs under Netlogo 6; you can freely download it from here: https://ccl.northwestern.edu/netlogo/download.shtml
 
 Start Netlogo; open the model.nlogo file from netlogo; click setup, then simulate. 
 Then restart by tuning parameters.

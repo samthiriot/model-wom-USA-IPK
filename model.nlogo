@@ -1,26 +1,5 @@
 extensions [nw]
 
-; for interfacing with genlab: indicate what is inputs
-to-report genlab-inputs
-  report ["network-filename" "proportion-active" "proportion-promoters" "duration-seek" "duration-proactive"]
-end
-
-
-to-report result-A
-  report (count turtles with [not unaware?] / count turtles)
-end
-
-to-report result-AK
-  report count turtles with [(not unaware?) and (not ignorant?)] / count turtles
-end
-
-to-report genlab-outputs
-  report ["result-AK" "result-A" ]
-end
-
-breed [nodes node]
-undirected-link-breed [edges edge]
-
 globals
 [
   ticks-for-peak-A ;; the tick for the max of Awareness (was never higher later)
@@ -30,6 +9,12 @@ globals
   ticks-last-activity ; the last tick when something happened
 ]
 
+;; defines the type used for links
+undirected-link-breed [edges edge]
+
+;; "turtles" (in the good old netlogo terminology)
+;; represent individuals holding states for awareness and an expertise
+;; they are also nodes in the social network
 turtles-own
 [
   unaware?           ;; state on the awareness dimension: if true, the turtle is unaware
@@ -47,22 +32,35 @@ turtles-own
   time ; if > 0, the time to remain in this step
 ]
 
+;; "links" represent social links.
+;; their states are just used to understand what happens during the simulation
+;; (visualisation) but not for computations.
 links-own
 [
  cascade-awareness?
  cascade-expertise?
  chain-retrieval?
-
 ]
 
+to-report result-A
+  report (count turtles with [not unaware?] / count turtles)
+end
+
+to-report result-AK
+  report count turtles with [(not unaware?) and (not ignorant?)] / count turtles
+end
+
+to-report genlab-outputs
+  report ["result-AK" "result-A" ]
+end
 
 to setup-network-load
   ;; load the network from the file and also initialize their state
   show "loading network"
   show network-filename
-  nw:load-gml network-filename nodes links
+  nw:load-graphml network-filename
    [
-    ; for visual reasons, we don't put any nodes *too* close to the edges
+    ; for visual reasons, we don't put any turtles *too* close to the edges
     setxy (random-xcor * 0.8) (random-ycor * 0.8)
     set size 1.5
     set unaware? true
@@ -83,12 +81,13 @@ to setup-network-load
    show count turtles
    ;; also layout it for beauty purpose
    if (with-gui) [
-     repeat 500 [layout-spring turtles links 0.1 4 4]
+     show "network graphical layout..."
+     repeat 200 [layout-spring turtles links 0.1 4 4]
      ;layout-radial turtles links (turtle 0)
 
    ]
    ;repeat 5 [ layout-spring turtles links 0.8 (world-width / (sqrt count turtles)) 1 ]
-
+  show "end of init, let's play!"
 end
 
 
@@ -97,26 +96,26 @@ to setup
   clear-all
 
   setup-network-load
-  setup-nodes
+  setup-turtles
 
   ; init the characteristics
-  ask nodes [
+  ask turtles [
     set curious? false
     set enthusiastic? false
     set supporter? false
   ]
 
-  ask n-of (proportion-curious * count nodes) nodes [
+  ask n-of (proportion-curious * count turtles) turtles [
     set curious? true
   ]
-  ask n-of (proportion-enthusiastic * count nodes) nodes [
+  ask n-of (proportion-enthusiastic * count turtles) turtles [
       set enthusiastic? true
   ]
-  ask n-of (proportion-supporters * count nodes) nodes [
+  ask n-of (proportion-supporters * count turtles) turtles [
         set supporter? true
   ]
 
-  ask nodes [
+  ask turtles [
     set shape "circle"
     if curious? [ set shape "triangle" ]
     if enthusiastic? or supporter? [  set shape "square"]
@@ -144,7 +143,7 @@ to setup
   reset-ticks
 end
 
-to setup-nodes
+to setup-turtles
   if (with-gui) [ set-default-shape turtles "circle" ]
 
 end
@@ -392,10 +391,10 @@ end
 GRAPHICS-WINDOW
 677
 10
-2174
-1528
-50
-50
+2172
+1506
+-1
+-1
 14.732
 1
 10
@@ -497,7 +496,7 @@ probability-link-meeting
 probability-link-meeting
 0
 1
-1
+0.42
 0.01
 1
 NIL
@@ -512,7 +511,7 @@ duration-seek
 duration-seek
 0
 100
-5
+5.0
 1
 1
 NIL
@@ -527,7 +526,7 @@ duration-proactive
 duration-proactive
 0
 100
-6
+5.0
 1
 1
 NIL
@@ -542,7 +541,7 @@ advertisement-proportion-per-step
 advertisement-proportion-per-step
 0
 1
-0.1
+0.04
 0.01
 1
 NIL
@@ -557,7 +556,7 @@ initial-proportion-knowledgeable
 initial-proportion-knowledgeable
 0
 1
-0.1
+0.03
 0.01
 1
 NIL
@@ -591,7 +590,7 @@ proportion-curious
 proportion-curious
 0
 1
-0.1
+0.15
 0.01
 1
 NIL
@@ -606,7 +605,7 @@ proportion-enthusiastic
 proportion-enthusiastic
 0
 1
-0.11
+0.15
 0.01
 1
 NIL
@@ -618,7 +617,7 @@ INPUTBOX
 231
 87
 network-filename
-ws1000_network.txt
+networks/network_1000.graphml
 1
 0
 String
@@ -665,7 +664,7 @@ advertisement-duration
 advertisement-duration
 0
 50
-10
+6.0
 1
 1
 NIL
@@ -713,7 +712,7 @@ proportion-supporters
 proportion-supporters
 0
 1
-0
+0.08
 0.01
 1
 NIL
@@ -761,58 +760,15 @@ When an Unaware and Ignorant agent receives awareness, an agent becomes Seeking 
 
 
 
-OLD OLD OLD !!!
-
-each infected node (colored red) attempts to infect all of its neighbors.  Susceptible neighbors (colored green) will be infected with a probability given by the VIRUS-SPREAD-CHANCE slider.  This might correspond to the probability that someone on the susceptible system actually executes the infected email attachment.
-Resistant nodes (colored gray) cannot be infected.  This might correspond to up-to-date antivirus software and security patches that make a computer immune to this particular virus.
-
-Infected nodes are not immediately aware that they are infected.  Only every so often (determined by the VIRUS-CHECK-FREQUENCY slider) do the nodes check whether they are infected by a virus.  This might correspond to a regularly scheduled virus-scan procedure, or simply a human noticing something fishy about how the computer is behaving.  When the virus has been detected, there is a probability that the virus will be removed (determined by the RECOVERY-CHANCE slider).
-
-If a node does recover, there is some probability that it will become resistant to this virus in the future (given by the GAIN-RESISTANCE-CHANCE slider).
-
-When a node becomes resistant, the links between it and its neighbors are darkened, since they are no longer possible vectors for spreading the virus.
-
 ## HOW TO USE IT
-
-Using the sliders, choose the NUMBER-OF-NODES and the AVERAGE-NODE-DEGREE (average number of links coming out of each node).
-
-The network that is created is based on proximity (Euclidean distance) between nodes.  A node is randomly chosen and connected to the nearest node that it is not already connected to.  This process is repeated until the network has the correct number of links to give the specified average node degree.
-
-The INITIAL-OUTBREAK-SIZE slider determines how many of the nodes will start the simulation infected with the virus.
-
-Then press SETUP to create the network.  Press GO to run the model.  The model will stop running once the virus has completely died out.
-
-The VIRUS-SPREAD-CHANCE, VIRUS-CHECK-FREQUENCY, RECOVERY-CHANCE, and GAIN-RESISTANCE-CHANCE sliders (discussed in "How it Works" above) can be adjusted before pressing GO, or while the model is running.
-
-The NETWORK STATUS plot shows the number of nodes in each state (S, I, R) over time.
+TODO
 
 ## THINGS TO NOTICE
-
-At the end of the run, after the virus has died out, some nodes are still susceptible, while others have become immune.  What is the ratio of the number of immune nodes to the number of susceptible nodes?  How is this affected by changing the AVERAGE-NODE-DEGREE of the network?
+TODO
 
 ## THINGS TO TRY
+TODO
 
-Set GAIN-RESISTANCE-CHANCE to 0%.  Under what conditions will the virus still die out?   How long does it take?  What conditions are required for the virus to live?  If the RECOVERY-CHANCE is bigger than 0, even if the VIRUS-SPREAD-CHANCE is high, do you think that if you could run the model forever, the virus could stay alive?
-
-## EXTENDING THE MODEL
-
-The real computer networks on which viruses spread are generally not based on spatial proximity, like the networks found in this model.  Real computer networks are more often found to exhibit a "scale-free" link-degree distribution, somewhat similar to networks created using the Preferential Attachment model.  Try experimenting with various alternative network structures, and see how the behavior of the virus differs.
-
-Suppose the virus is spreading by emailing itself out to everyone in the computer's address book.  Since being in someone's address book is not a symmetric relationship, change this model to use directed links instead of undirected links.
-
-Can you model multiple viruses at the same time?  How would they interact?  Sometimes if a computer has a piece of malware installed, it is more vulnerable to being infected by more malware.
-
-Try making a model similar to this one, but where the virus has the ability to mutate itself.  Such self-modifying viruses are a considerable threat to computer security, since traditional methods of virus signature identification may not work against them.  In your model, nodes that become immune may be reinfected if the virus has mutated to become significantly different than the variant that originally infected the node.
-
-## RELATED MODELS
-
-Virus, Disease, Preferential Attachment, Diffusion on a Directed Network
-
-## NETLOGO FEATURES
-
-Links are used for modeling the network.  The `layout-spring` primitive is used to position the nodes and links such that the structure of the network is visually clear.
-
-Though it is not used in this model, there exists a network extension for NetLogo that you can download at: https://github.com/NetLogo/NW-Extension.
 
 ## HOW TO CITE
 
@@ -820,23 +776,17 @@ If you mention this model or the NetLogo software in a publication, we ask that 
 
 For the model itself:
 
-* Stonedahl, F. and Wilensky, U. (2008).  NetLogo Virus on a Network model.  http://ccl.northwestern.edu/netlogo/models/VirusonaNetwork.  Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
+* Samuel Thiriot, Word-of-mouth dynamics with information seeking: Information is not (only) epidemics,
+Physica A: Statistical Mechanics and its Applications,
+Volume 492, 2018, Pages 418-430,
+ISSN 0378-4371,
+https://doi.org/10.1016/j.physa.2017.09.056.
+(http://www.sciencedirect.com/science/article/pii/S0378437117309482)
+
 
 Please cite the NetLogo software as:
 
 * Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
-
-## COPYRIGHT AND LICENSE
-
-Copyright 2008 Uri Wilensky.
-
-![CC BY-NC-SA 3.0](http://ccl.northwestern.edu/images/creativecommons/byncsa.png)
-
-This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License.  To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/3.0/ or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
-
-Commercial licenses are also available. To inquire about commercial licenses, please contact Uri Wilensky at uri@northwestern.edu.
-
-<!-- 2008 Cite: Stonedahl, F. -->
 @#$#@#$#@
 default
 true
@@ -1119,9 +1069,8 @@ false
 0
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
-
 @#$#@#$#@
-NetLogo 5.2.1
+NetLogo 6.0.3
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
@@ -1137,7 +1086,6 @@ true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
-
 @#$#@#$#@
 0
 @#$#@#$#@
