@@ -26,7 +26,7 @@ Then restart by tuning parameters.
 To explore the space of parameters, we rely on the OpenMole software: https://www.openmole.org/
 
 Open in OpenMole the exploration workflow found in the "exploration" directory. 
-For each point of the space of parameters:
+For each point of the space of parameters, this workflow will:
 * generate a network using R/igraph and measure its properties
 * transmit it to netlogo as an input file
 * store the simulation results into a CSV file 
