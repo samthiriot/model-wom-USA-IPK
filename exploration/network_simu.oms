@@ -1,0 +1,192 @@
+
+// to run in parallel on the local computer
+// update it with the number of threads your CPU has
+val envMultithread = LocalEnvironment(4)
+
+
+// inputs 
+val networkSize = Val[Integer]
+val networkNei = Val[Integer]
+val networkRewiring = Val[Double]
+
+// R: we run the network 
+val averagepathlength = Val[Double]
+val diameter = Val[Double]
+val networkfile = Val[File]
+val nvertices = Val[Double]
+val nedges = Val[Double]
+val transitivity = Val[Double]
+//val networkfilename = Val[String]
+
+val probabilityLinkMeeting = Val[Double]
+val durationSeek = Val[Double]
+val durationProactive = Val[Double]
+val advertisementProportionPerStep = Val[Double]
+val advertisementDuration = Val[Double]
+val initialProportionKnowledgeable = Val[Double]
+val proportionCurious = Val[Double]
+val proportionEnthusiastic = Val[Double]
+val proportionSupporters = Val[Double]
+
+
+val generateNetworkTask =
+  RTask("""
+        # define a filename 
+        # generate a unique file name
+        
+        # networkfile <- paste("/tmp/network_",paste(sample(LETTERS,5),collapse=""),".net", sep="")
+        # while (file.exists(networkfile)) {
+        #   networkfile <- paste("/tmp/network_",paste(sample(LETTERS,10),collapse=""),".net", sep="")
+        # }
+        
+        networkfile <- "/tmp/network_generated.net"
+        
+        # load the library
+        library(igraph)
+        
+        # generate the network
+        g <- igraph::watts.strogatz.game(
+                                size=networkSize,nei=networkNei, p=networkRewiring,
+                                dim=1,multiple=F,loops=F)
+        g <- as.undirected(g)
+        g <- simplify(g)
+        
+        # write the graph into a file
+        write.graph(g, file=networkfile, format="graphml")
+        
+        # ensure the file does exist ! 
+        if (!file.exists(networkfile)) {
+          stop(paste("error, the file was not written into ", networkfile, sep=""))
+        }
+        
+        averagepathlength <- average.path.length(g)
+        diameter <- as.integer(diameter(g))
+        nvertices <- vcount(g)
+        nedges <- ecount(g)
+        transitivity <- transitivity(g)
+        #filename <- paste("network_",paste(sample(LETTERS,10),collapse=""),".net", sep="")
+        """, 
+        libraries = Seq("igraph") 
+  ) set (
+    
+    rInputs += networkSize,
+    rInputs += networkNei,
+    rInputs += networkRewiring,
+    
+    rOutputs += averagepathlength,
+    rOutputs += diameter,
+    rOutputs += nvertices,
+    rOutputs += nedges,
+    rOutputs += transitivity,
+
+    // let the input parameters flow accross
+    outputs += (proportionCurious, proportionEnthusiastic),
+    inputs += (proportionCurious, proportionEnthusiastic),
+
+    outputFiles += ("/tmp/network_generated.net", networkfile),
+
+    networkSize := 1000,
+    networkNei := 4,
+    networkRewiring := 0.15
+  )
+
+
+
+// Netlogo task: to run the simulation
+// takes as inputs the network file (which should have been generated beforehand)
+
+val seed = Val[Int]
+
+val withGui = Val[Boolean]
+
+val ticksForPeakA = Val[Double]
+val ticksForPeakAK = Val[Double]
+val ticksLastActivity = Val[Double]
+
+val propAware = Val[Double]
+val propAwareKnowledgeable = Val[Double]
+
+
+val launch = List("setup","random-seed ${seed}","go;;You should set your stopping criteria here instead")
+     
+val simulateTask = NetLogo6Task(workDirectory / "model.nlogo", launch, embedWorkspace = true) set(
+
+  inputs += (seed, proportionCurious, proportionEnthusiastic),
+  
+  netLogoInputs += (probabilityLinkMeeting, "probability-link-meeting"),
+  netLogoInputs += (durationSeek, "duration-seek"),
+  netLogoInputs += (durationProactive, "duration-proactive"),
+  netLogoInputs += (advertisementProportionPerStep, "advertisement-proportion-per-step"),
+  netLogoInputs += (initialProportionKnowledgeable, "initial-proportion-knowledgeable"),
+  netLogoInputs += (proportionCurious, "proportion-curious"),
+  netLogoInputs += (proportionEnthusiastic, "proportion-enthusiastic"),
+  netLogoInputs += (withGui, "with-gui"),
+  netLogoInputs += (advertisementDuration, "advertisement-duration"),
+  netLogoInputs += (proportionSupporters, "proportion-supporters"),
+  netLogoInputs += (networkfile, "network-filename"),
+  
+  netLogoOutputs += ("ticks-for-peak-A", ticksForPeakA),
+  netLogoOutputs += ("ticks-for-peak-AK", ticksForPeakAK),
+  netLogoOutputs += ("ticks-last-activity", ticksLastActivity),
+  netLogoOutputs += ("(count turtles with [aware?] / count turtles)", propAware),
+  netLogoOutputs += ("(count turtles with [(not unaware?) and (not ignorant?)] / count turtles)", propAwareKnowledgeable),
+
+  // publish inputs as outputs
+  netLogoOutputs += ("probability-link-meeting", probabilityLinkMeeting),
+  netLogoOutputs += ("duration-seek", durationSeek),
+  netLogoOutputs += ("duration-proactive", durationProactive),
+  netLogoOutputs += ("advertisement-proportion-per-step", advertisementProportionPerStep),
+  netLogoOutputs += ("initial-proportion-knowledgeable", initialProportionKnowledgeable),
+  netLogoOutputs += ("proportion-curious", proportionCurious),
+  netLogoOutputs += ("proportion-enthusiastic", proportionEnthusiastic),
+  netLogoOutputs += ("proportion-supporters", proportionSupporters),
+  netLogoOutputs += ("advertisement-duration", advertisementDuration),
+  
+  // let the network characteristics flow accross the task
+  (inputs,outputs) += (diameter, averagepathlength, nvertices, nedges, transitivity),
+  //(inputs,outputs) += networkfile,
+  //inputs += networkfilename,
+  
+  //Default values. Can be removed if OpenMOLE Vals are set by values coming from the workflow
+  seed := 0,
+  probabilityLinkMeeting := 0.42,
+  durationSeek := 5.0,
+  durationProactive := 5.0,
+  advertisementProportionPerStep := 0.04,
+  initialProportionKnowledgeable := 0.03,
+  //proportionCurious := 0.15,
+  //proportionEnthusiastic := 0.15,
+  withGui := false, // do not waste time in graphical user display
+  advertisementDuration := 6.0,
+  proportionSupporters := 0.08
+)
+
+// TODO replicate several executions and compute stats on their results (or not ?)
+
+// to run it just once
+//generateNetworkTask -- simulateTask hook ToStringHook()
+/*
+(
+    (generateNetworkTask on envMultithread hook CopyFileHook(networkfile, workDirectory / "networks/${networkfilename}")) 
+      //-- (forgeFilenameTask on envMultithread hook ToStringHook()) 
+      -- (simulateTask on envMultithread hook ToStringHook())  
+      )
+  */
+  
+// to run it 
+
+// this hook is storing all the inputs and outputs into a CSV file
+val appendCSV = AppendToCSVFileHook(workDirectory / "results/explo.csv")
+
+// exploration of the space of parameters
+val exploration1 = ExplorationTask (
+   ( proportionCurious in (0.0 to 1.0 by 0.1) ) 
+    x ( proportionEnthusiastic in (0.0 to 1.0 by 0.1) )
+    x ( proportionSupporters in (0.0 to 1.0 by 0.1) )
+ )
+
+// start the exploration 
+exploration1 -< ( (generateNetworkTask on envMultithread) -- (simulateTask on envMultithread hook appendCSV) )
+
+
+

@@ -16,11 +16,21 @@ https://doi.org/10.1016/j.physa.2017.09.056.
 
 # How to use it?
 
-
 This model runs under Netlogo 6; you can freely download it from here: https://ccl.northwestern.edu/netlogo/download.shtml
 
 Start Netlogo; open the model.nlogo file from netlogo; click setup, then simulate. 
 Then restart by tuning parameters.
+
+# Exploration of the space of parameters
+
+To explore the space of parameters, we rely on the OpenMole software: https://www.openmole.org/
+
+Open in OpenMole the exploration workflow found in the "exploration" directory. 
+For each point of the space of parameters:
+* generate a network using R/igraph and measure its properties
+* transmit it to netlogo as an input file
+* store the simulation results into a CSV file 
+
 
 # Advanced 
 
