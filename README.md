@@ -18,7 +18,7 @@ https://doi.org/10.1016/j.physa.2017.09.056.
 
 This model runs under Netlogo 6; you can freely download it from here: https://ccl.northwestern.edu/netlogo/download.shtml
 
-Start Netlogo; open the model-gen-net.nlogo file from netlogo; click setup, then simulate. 
+Start Netlogo; open the `model-wom-information-seeking.nlogo` file from netlogo; click setup, then simulate. 
 Then restart by tuning parameters. Have a look to the "info tab" which explains what happens and what to explore.
 
 

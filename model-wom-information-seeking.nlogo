@@ -155,8 +155,6 @@ to go
     )
     [ stop ]
 
-
-
   ; change the state of agents which are in timeout
   manage-timeouts
 
@@ -170,8 +168,6 @@ to go
   ; detect outputs related to time
   update-ticks-detection
 
-  ;spread-virus
-  ;do-virus-checks
   tick
 end
 
@@ -334,7 +330,6 @@ end
 to exchange-info
 
   ; by default, all the links are gray
-  ;ask links [ set color gray ]
 
   ; drive a given number of links
   ask n-of (probability-link-meeting * count links)  links
@@ -838,7 +833,6 @@ Volume 492, 2018, Pages 418-430,
 ISSN 0378-4371,
 https://doi.org/10.1016/j.physa.2017.09.056.
 (http://www.sciencedirect.com/science/article/pii/S0378437117309482)
-
 @#$#@#$#@
 default
 true
