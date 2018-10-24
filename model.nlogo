@@ -389,10 +389,10 @@ end
 ; See Info tab for full copyright and license.
 @#$#@#$#@
 GRAPHICS-WINDOW
-677
-10
-2172
-1506
+525
+19
+2020
+1515
 -1
 -1
 14.732
@@ -416,10 +416,10 @@ ticks
 30.0
 
 BUTTON
-26
-165
-121
-205
+18
+18
+113
+58
 NIL
 setup
 NIL
@@ -433,10 +433,10 @@ NIL
 1
 
 BUTTON
-136
-165
-231
-205
+17
+70
+112
+110
 NIL
 go
 T
@@ -450,10 +450,10 @@ NIL
 1
 
 PLOT
-27
-327
-648
-551
+18
+396
+509
+620
 diffusion
 NIL
 NIL
@@ -471,10 +471,10 @@ PENS
 "Proactive" 1.0 0 -955883 true "" "plot (count turtles with [proactive?] / count turtles)"
 
 BUTTON
-137
-217
-231
-256
+16
+122
+112
+161
 step
 go
 NIL
@@ -488,10 +488,10 @@ NIL
 1
 
 SLIDER
-242
-247
-546
-280
+133
+223
+506
+256
 probability-link-meeting
 probability-link-meeting
 0
@@ -503,10 +503,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-437
-13
-609
-46
+334
+19
+506
+52
 duration-seek
 duration-seek
 0
@@ -518,10 +518,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-437
-55
-609
-88
+334
+59
+506
+92
 duration-proactive
 duration-proactive
 0
@@ -533,10 +533,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-242
-207
-549
-240
+132
+181
+506
+214
 advertisement-proportion-per-step
 advertisement-proportion-per-step
 0
@@ -548,10 +548,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-242
-164
-547
-197
+132
+140
+506
+173
 initial-proportion-knowledgeable
 initial-proportion-knowledgeable
 0
@@ -563,10 +563,10 @@ NIL
 HORIZONTAL
 
 PLOT
-36
-578
-647
-728
+18
+634
+509
+784
 interactions
 NIL
 NIL
@@ -582,40 +582,40 @@ PENS
 "used" 1.0 0 -955883 true "" "plot (count links with [color = orange] / count links)"
 
 SLIDER
-241
-13
-436
-46
+132
+18
+327
+51
 proportion-curious
 proportion-curious
 0
 1
-0.39
+0.3
 0.01
 1
 NIL
 HORIZONTAL
 
 SLIDER
-241
-54
-435
-87
+132
+59
+327
+92
 proportion-enthusiastic
 proportion-enthusiastic
 0
 1
-0.0
+0.3
 0.01
 1
 NIL
 HORIZONTAL
 
 INPUTBOX
-24
-11
-231
-87
+133
+313
+507
+376
 network-filename
 networks/network_1000.graphml
 1
@@ -623,10 +623,10 @@ networks/network_1000.graphml
 String
 
 SWITCH
-694
-326
-806
-359
+37
+884
+149
+917
 with-gui
 with-gui
 0
@@ -634,21 +634,21 @@ with-gui
 -1000
 
 MONITOR
-557
-174
-653
-219
-NIL
+18
+274
+95
+319
+individuals
 count turtles
 17
 1
 11
 
 MONITOR
-559
-231
-653
-276
+18
+331
+95
+376
 NIL
 count links
 17
@@ -656,10 +656,10 @@ count links
 11
 
 SLIDER
-248
-290
-474
-323
+133
+267
+506
+300
 advertisement-duration
 advertisement-duration
 0
@@ -671,10 +671,10 @@ NIL
 HORIZONTAL
 
 MONITOR
-28
-274
-86
-319
+36
+930
+94
+975
 peak A
 ticks-for-peak-A
 17
@@ -682,10 +682,10 @@ ticks-for-peak-A
 11
 
 MONITOR
-98
-273
-155
-318
+106
+929
+163
+974
 peak AK
 ticks-for-peak-AK
 17
@@ -693,10 +693,10 @@ ticks-for-peak-AK
 11
 
 MONITOR
-170
-274
-227
-319
+178
+930
+235
+975
 NIL
 ticks-last-activity
 17
@@ -704,25 +704,25 @@ ticks-last-activity
 11
 
 SLIDER
-241
-103
-458
-136
+132
+99
+327
+132
 proportion-supporters
 proportion-supporters
 0
 1
-0.0
+0.3
 0.01
 1
 NIL
 HORIZONTAL
 
 TEXTBOX
-689
-41
-1222
-281
+543
+37
+1076
+277
 Node shapes represent the constant properties of people:\ncircle = nothing special\ntriangle = curious (if aware, starts seeking out)\nsquare = enthusiastic or supporter (if knowledgeable, starts passing the word)\npentagon = curious and (enthousiastic or supporter)\n\nNode colors: current state of people\npurple = Aware and Knowledgeable\nbrown = Unaware and Knowledgeable\norange = proactive\n\nLink colors:\ngreen = awareness cascade\norange = expertise cascade\npurple = chain of information retrieval\n
 12
 9.9
@@ -731,18 +731,18 @@ Node shapes represent the constant properties of people:\ncircle = nothing speci
 @#$#@#$#@
 ## WHAT IS IT?
 
-Studies on word-of-mouth identify two facets in the transmission of information: seeking and spreading. People seek out for information when they become aware of an innovation, in order to gather the expert knowledge required to understand it. Only when they are aware and expert, people can decide to adopt or reject. Past models only saw word-of-mouth as one-dimentionnal epidemic dynamics (Susceptible, Infective, Removed); here we provide a minimalist model to study what happens if we consider both awareness and expertise. In this model, a small proportion of the population is initially holding expertise; the question is how many agents will achieve to gather it because of advertisement or peers raising their curiosity.
+Studies on word-of-mouth identify two facets in the transmission of information: seeking and spreading. People seek out for information when they become aware of an innovation, in order to gather the expert knowledge required to understand it. Only when they are aware and expert, people can decide to adopt or reject. Past models only saw word-of-mouth as one dimensional epidemic dynamics (Susceptible, Infective, Removed); here we provide a minimalist model to study what happens if we consider both awareness and expertise. In this model, a small proportion of the population is initially holding expertise; the question is how many agents will achieve to gather it because of advertisement or peers raising their curiosity.
 
 Information seeking is only possible if an individual can hold at least two levels of knowledge, namely awareness and expert knowledge:
 
-  * **awareness**: does the individual knows the existence of the innovation, even if s/he does not understands it? Encoded as 3 levels: U, S, A
+  * **awareness**: does the individual knows the existence of the innovation, even if s/he does not understand it? Encoded as 3 levels: U, S, A
     * **U**naware: the individual does not know the existence of the innovation 
     * aware & **S**eeking: the individual heard about the existence of the innovation, and is curious of it, so s/he is seeking for more information around him/her
     * passively **A**ware: the individual knows the existence of the innovation but is not searching for information (maybe s/he did before)
   * **expertise**: the individual holds expertise, either because he’s interested in this domain/brand/category of innovation or because someone else passed him this expertise. We define it as 3 levels: I, P, K
     * **I**gnorant: the individual does not know the expert knowledge required to understand the innovation
     * knowledgeable & **P**romoting: the individual discovered the expert knowledge, and because s/he understands the interest of it, is promoting it
-    * passively **K**nowledgeable: the individual holds the expert knowledge, does not spreads the word proactively, but answers questions if questionned
+    * passively **K**nowledgeable: the individual holds the expert knowledge, does not spread the word proactively, but answers questions if questioned
 
 The goal of an institution driving a communication campaign is to **achieve to have a population which is not only aware, but also holds the expert knowledge required to assess it**. Using the model, one can explore the following questions:
 
@@ -757,7 +757,7 @@ Each agent in the population represents an individual. Individuals have **consta
 
   * _curious_ individuals start seeking out information when they become aware; else they are just passively aware.
   * _enthusiastic_ individuals start promoting the innovation when they receive the expertise after being aware
-  * _supporter_ individuals start promoting the innovation when they receive the awareness after being knowledgable 
+  * _supporter_ individuals start promoting the innovation when they receive the awareness after being knowledgeable 
 
 Individuals also have a **state of knowledge** which evolves during the simulation. It is made of both awareness and expertise knowledge, so individuals hold a tuple (awareness, expertise), for instance (Unaware, Ignorant) for most of them, or (Unaware, Knowledgeable) for people holding the generic expertise but unaware of the innovation of interest. 
 
@@ -765,11 +765,11 @@ During initialization, a population of agents is created being in state (Unaware
 
 At setup time, the network indicated as a parameter is also loaded and used as a social network in the model. This network defines the structure of interactions in the population.
 
-Also during initialization, agents are randomly assigned three personnality characteristics: curious, enthusiastic, supporter, according to the parameters "proportion-curious", "proportion-enthusiastic", "proportion-supporter" defined by the user.
+Also during initialization, agents are randomly assigned three personality characteristics: curious, enthusiastic, supporter, according to the parameters "proportion-curious", "proportion-enthusiastic", "proportion-supporter" defined by the user.
 
 Each time step (tick):
 
-  1. the advertisement campain reaches a given proportion of the population and sends them awareness.
+  1. the advertisement campaign reaches a given proportion of the population and sends them awareness.
   2. the individuals linked together are offered the possibility to interact. If one of them is in state Seeking or Promoting, then an interaction takes place; each individual transmits its knowledge to the other individual. 
 
 
@@ -790,28 +790,26 @@ Set _proportion-curious_, _proportion-enthusiatic_, _proportion-supporters_ to 0
 
 ## THINGS TO NOTICE
 
-Look at the "diffusion" plot. The green and orange curves represent the people Seeking and Promoting the innovation; the diffusion of knowledge is first bootstrapped by people who Seek out for information (if there are enough curious) and thus also propagate the  existence of awareness. There is first a _diffusion of seeking_: an "hype" is inchreasing in the population of people who want to know more. Then when people Seeking for information achieve to find expertise held by one of the few initial experts, they hold the expertise and can pass it back to others. Information seeking acts as a bootstrap for expertise retrieval. 
+Look at the "diffusion" plot. The green and orange curves represent the people Seeking and Promoting the innovation; the diffusion of knowledge is first bootstrapped by people who Seek out for information (if there are enough curious) and thus also propagate the  existence of awareness. There is first a _diffusion of seeking_: an "hype" is increasing in the population of people who want to know more. Then when people Seeking for information achieve to find expertise held by one of the few initial experts, they hold the expertise and can pass it back to others. Information seeking acts as a bootstrap for expertise retrieval. 
 
-Notice that at the end of the simulation, a large part of the population got the expertise, despite of the very low initial proportion of expertise in the population (3%). 
+Notice that at the end of the simulation, a large part of the population got the expertise, despite the very low initial proportion of expertise in the population (3%). 
 
-Look at the network view of the population. Green edges mean someone discovered awareness thanks to this edge; orange than expertise was propagated; purple that both occured. At the beginning many awareness cascades happen, where each Seeker is "contaminating" other curious entities. When a Seeker meets an expert, then he becomes expert, and can thus answer the questions asked by people around him; so there is the apparition of "information retrieval chains" in purple, in which individuals A made B curious who made C curious, C gets expertise from D, then becomes knowledgeable, then tells expertise to B, who passes it to A, etc. This type of chain is capital in the model, and raises the question of their actual existence in the field. 
+Look at the network view of the population. Green edges mean someone discovered awareness thanks to this edge; orange than expertise was propagated; purple that both occurred. At the beginning many awareness cascades happen, where each Seeker is "contaminating" other curious entities. When a Seeker meets an expert, then he becomes expert, and can thus answer the questions asked by people around him; so there is the apparition of "information retrieval chains" in purple, in which individuals A made B curious who made C curious, C gets expertise from D, then becomes knowledgeable, then tells expertise to B, who passes it to A, etc. This type of chain is capital in the model, and raises the question of their actual existence in the field. 
 
 Note how on the diffusion plot the S-curve of the proportion of awareness is always way higher than the curve "AK" (Aware and Knowledgeable). Measuring the impact of advertisement would only measure how many people were made aware, but would not quantify how many people hold enough information to understand and adopt the innovation.
 
 ## THINGS TO TRY
 
-Set _proportion-curious_ to 0, so there is no information seeking any more, falling back to a pure epidemic setting. Explore the proportions of enthusiastic and supporters required to reach high levels of awareness and knowledge at the end of the simulation. 
+Set _proportion-curious_ to 0, so there is no information seeking anymore, falling back to a pure epidemic setting. Explore the proportions of enthusiastic and supporters required to reach high levels of awareness and knowledge at the end of the simulation. 
 
-Try also a high proportion of curious and few enthusiastic and supporters; observe how we actually need both to reach efficient information diffusion.
+Try also a high proportion of curious and few enthusiastic and supporters; observe how we actually need both seeking and promotion to reach efficient information diffusion.
 
 
 ## HOW TO CITE
 
-If you mention this model or the NetLogo software in a publication, we ask that you include the citations below.
+If you mention this model in a publication, we ask that you include the citations below.
 
-For the model itself:
-
-* Samuel Thiriot, Word-of-mouth dynamics with information seeking: Information is not (only) epidemics,
+Samuel Thiriot, Word-of-mouth dynamics with information seeking: Information is not (only) epidemics,
 Physica A: Statistical Mechanics and its Applications,
 Volume 492, 2018, Pages 418-430,
 ISSN 0378-4371,
